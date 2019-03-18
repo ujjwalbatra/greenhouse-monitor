@@ -1,6 +1,15 @@
 {
+  "data_range": {
     "min_temperature": 20,
     "max_temperature": 22,
     "min_humidity": 50,
     "max_humidity": 60
+  },
+  "sqlite3": {
+    "host": "localhost",
+    "user": "root",
+    "passwd": "",
+    "db": "",
+    "file": "data_recorded.db"
+  }
 }

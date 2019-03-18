@@ -3,6 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# jetbrain project file
+.idea
+
+#hiding db
+*.db
+
 # C extensions
 *.so
 
