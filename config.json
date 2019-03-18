@@ -6,10 +6,6 @@
     "max_humidity": 60
   },
   "sqlite3": {
-    "host": "localhost",
-    "user": "root",
-    "passwd": "",
-    "db": "",
-    "file": "data_recorded.db"
+    "file": "YOUR_DB_FILE_NAME.db"
   }
 }
