@@ -48,3 +48,6 @@ class GreenhouseMonitorDatabase(object):
         print("Works")
         for row in rows:
             print(row)
+        return rows
+    
+    

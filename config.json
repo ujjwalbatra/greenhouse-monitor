@@ -1,7 +1,7 @@
 {
   "data_range": {
     "min_temperature": 20,
-    "max_temperature": 22,
+    "max_temperature": 32,
     "min_humidity": 50,
     "max_humidity": 60
   },
