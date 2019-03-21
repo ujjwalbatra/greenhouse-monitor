@@ -5,3 +5,4 @@ db = greenhouse_monitor_database.GreenhouseMonitorDatabase()
 
 db.create_tables()
 db.insert_notification_confirmation()
+db.close_connection()

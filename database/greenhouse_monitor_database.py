@@ -21,8 +21,8 @@ class GreenhouseMonitorDatabase(object):
             return data['sqlite3']['file']
 
     def close_connection(self):
-        self.__db_connection.close()
         self.__cursor.close()
+        self.__db_connection.close()
 
     def create_tables(self):
         self.__cursor.execute('''
