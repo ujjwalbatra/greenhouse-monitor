@@ -2,13 +2,13 @@ from sense_hat import SenseHat
 from abc import abstractmethod
 
 
-class ReadTemperature:
+class ReadTemperature():
     @abstractmethod
     def get_current_temperature(self, sense):
         pass
 
 
-class ReadHumidity:
+class ReadHumidity():
     @abstractmethod
     def get_current_humidity(self, sense):
         pass
