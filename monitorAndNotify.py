@@ -15,38 +15,14 @@ def monitor_and_notify(db):
     # log temp and humidity to db
     db.insert_sensor_data(temperature, humidity)
 
-    temp_in_range = check_temperature_in_range(temperature)
-    humid_in_range = check_humidity_in_range(humidity)
+    temp_in_range = temperature_humidity.check_temperature_in_range(temperature)
+    humid_in_range = temperature_humidity.check_humidity_in_range(humidity)
 
     # if values out of range, if notification not already sent send it and mark it as sent in db
     if (not temp_in_range) or (not humid_in_range):
         title = "Warning! Values out of range."
         body = 'Value out of range: \n\ttemperature: %f\n\thumidity: %f' % (temperature, humidity)
         send_notification(db, title, body)
-
-
-def check_temperature_in_range(temperature):
-    with open('config.json') as json_file:
-        data = json.load(json_file)
-        min_temp = data['data_range']['min_temperature']
-        max_temp = data['data_range']['max_temperature']
-
-    if max_temp > temperature > min_temp:
-        return True
-    else:
-        return False
-
-
-def check_humidity_in_range(humidity):
-    with open('config.json') as json_file:
-        data = json.load(json_file)
-        min_humidity = data['data_range']['min_humidity']
-        max_humidity = data['data_range']['max_humidity']
-
-    if max_humidity > humidity > min_humidity:
-        return True
-    else:
-        return False
 
 
 def send_notification(db, title, body):
