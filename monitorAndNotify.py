@@ -1,8 +1,78 @@
 from database import greenhouse_monitor_database
+from notification import pushbullet
+from sense_hat_monitoring import sensor_data
+import time
+from sqlite3 import Error
+import json
 
 
-db = greenhouse_monitor_database.GreenhouseMonitorDatabase()
+def monitor_and_notify(db):
+    temperature_humidity = sensor_data.SensorData()
 
-db.create_tables()
-db.insert_notification_confirmation()
-db.close_connection()
+    temperature = temperature_humidity.get_temperature()
+    humidity = temperature_humidity.get_humidity()
+
+    # log temp and humidity to db
+    db.insert_sensor_data(temperature, humidity)
+
+    temp_in_range = check_temperature_in_range(temperature)
+    humid_in_range = check_humidity_in_range(humidity)
+
+    # if values out of range, if notification not already sent send it and mark it as sent in db
+    if (not temp_in_range) or (not humid_in_range):
+        title = "Warning! Values out of range."
+        body = f"Value out of range: \n\ttemperature: {temperature}\n\thumidity: {humidity}"
+        send_notification(db, title, body)
+
+
+def check_temperature_in_range(temperature):
+    with open('config.json') as json_file:
+        data = json.load(json_file)
+        min_temp = data['date_range']['min_temperature']
+        max_temp = data['date_range']['max_temperature']
+
+    if max_temp > temperature > min_temp:
+        return True
+    else:
+        return False
+
+
+def check_humidity_in_range(humidity):
+    with open('config.json') as json_file:
+        data = json.load(json_file)
+        min_humidity = data['date_range']['min_humidity']
+        max_humidity = data['date_range']['max_humidity']
+
+    if max_humidity > humidity > min_humidity:
+        return True
+    else:
+        return False
+
+
+def send_notification(db, title, body):
+    notification_sent = db.check_notification_sent()
+
+    # send notification only if not sent earlier on same date
+    if notification_sent == 0:
+        notification_sender = pushbullet.PushBullet(title, body)
+        notification_sender.send_notification()
+        # mark notification sent status in db
+        db.mark_notification_sent()
+
+
+if __name__ == '__main__':
+    db = greenhouse_monitor_database.GreenhouseMonitorDatabase()
+    db.create_tables()
+    try:
+        db.insert_notification_confirmation()
+    except Error as e:
+        pass  # ignore error here, error here means that the row is already inserted
+
+    minutes = 120
+
+    # every minute for 2 hours
+    for i in range(minutes):
+        monitor_and_notify(db)
+        time.sleep(60)
+
+    db.close_connection()
