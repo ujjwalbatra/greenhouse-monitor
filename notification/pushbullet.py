@@ -7,7 +7,7 @@ class PushBullet(object):
         'Content-Type': 'application/json',
     }
     __notification_type = 'note'
-    __access_token: str
+    __access_token= ''
 
     def __init__(self, title, body):
         self.__data = json.dumps({"type": self.__notification_type, "title": title, "body": body})

@@ -15,8 +15,8 @@ class ReadHumidity():
 
 
 class SensorData(ReadTemperature, ReadHumidity):
-    __temperature: float
-    __humidity: float
+    __temperature = 0.0
+    __humidity = 0.0
 
     def __init__(self):
         sense = SenseHat()

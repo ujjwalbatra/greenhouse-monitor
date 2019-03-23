@@ -5,8 +5,7 @@ from datetime import date
 
 
 class GreenhouseMonitorDatabase(object):
-    __db_connection: sqlite3.Connection
-    __cursor: sqlite3.Cursor
+    
 
     def __init__(self):
         db_file = self.__get_database_filename()
