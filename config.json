@@ -7,5 +7,8 @@
   },
   "sqlite3": {
     "file": "YOUR_DB_FILE_NAME.db"
+  },
+  "pushbullet": {
+    "access_tokes": "YOUR_PUSHBULLET_ACCESS_TOKEN"
   }
 }
