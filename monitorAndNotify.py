@@ -3,7 +3,6 @@ from notification import pushbullet
 from sense_hat_monitoring import sensor_data
 import time
 from sqlite3 import Error
-import json
 
 
 def monitor_and_notify(db):
@@ -15,8 +14,8 @@ def monitor_and_notify(db):
     # log temp and humidity to db
     db.insert_sensor_data(temperature, humidity)
 
-    temp_in_range = temperature_humidity.check_temperature_in_range(temperature)
-    humid_in_range = temperature_humidity.check_humidity_in_range(humidity)
+    temp_in_range = temperature_humidity.check_temperature_in_range()
+    humid_in_range = temperature_humidity.check_humidity_in_range()
 
     # if values out of range, if notification not already sent send it and mark it as sent in db
     if (not temp_in_range) or (not humid_in_range):
