@@ -56,6 +56,7 @@ class GreenhouseMonitorDatabase(object):
         self.__cursor.execute('''UPDATE notification_confirmation SET notification_sent = 1 WHERE date_ = ?''',
                               (date.today().__str__(),))
 
+    # query the database of all values
     def query_to_db(self):
         self.__cursor.execute("SELECT * FROM sensor_data; ")
         rows = self.__cursor.fetchall()

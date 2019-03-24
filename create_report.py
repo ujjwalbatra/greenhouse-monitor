@@ -3,12 +3,10 @@ import csv
 from report_creation import ComputeReportGen
 import json
 
+
 class Report:
 
-    
-    
-    
-
+    # initializes the report
     def __init__(self):
         row = ["Date","Status"]
         with open('report.csv', 'a') as csvFile:
@@ -16,7 +14,7 @@ class Report:
             writer.writerow(row)
             csvFile.close() 
     
-    def testValuesDB(self,db):
+    def test_values_db(self, db):
         db.insert_sensor_data(25,35)
         db.insert_sensor_data(16,35)
         db.insert_sensor_data(17,35)
@@ -27,7 +25,8 @@ class Report:
         db.insert_sensor_data(24,37)
         db.insert_sensor_data(28,37)
 
-    def getRange(self):
+    # gets the range of temperature and humidity to compare
+    def get_range(self):
         with open('config.json') as json_file:  
             data = json.load(json_file)
             print(data['data_range'])
@@ -36,11 +35,12 @@ class Report:
     def main(self):
         db = greenhouse_monitor_database.GreenhouseMonitorDatabase()
         db.create_tables()
-        self.testValuesDB(db)
-        range=self.getRange()
-        rows=db.query_to_db()
+        self.test_values_db(db)
+        range_ = self.get_range()
+        rows = db.query_to_db()
         
-        ComputeReportGen.ComputeReportGen(range,rows)
+        ComputeReportGen.ComputeReportGen(range_, rows)
+
 
 if __name__ == "__main__":
     objName = Report()
