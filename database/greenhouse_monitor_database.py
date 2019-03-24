@@ -1,11 +1,11 @@
 import sqlite3
 import json
 from sqlite3 import Error
+from datetime import date
 
 
 class GreenhouseMonitorDatabase(object):
-    __db_connection: sqlite3.Connection
-    __cursor: sqlite3.Cursor
+    
 
     def __init__(self):
         db_file = self.__get_database_filename()
@@ -26,21 +26,32 @@ class GreenhouseMonitorDatabase(object):
 
     def create_tables(self):
         self.__cursor.execute('''
-                        CREATE TABLE IF NOT EXISTS notification_confirmation (id INTEGER PRIMARY KEY AUTOINCREMENT, date DATE DEFAULT CURRENT_DATE NOT NULL , notification_sent INTEGER DEFAULT 0);
+                        CREATE TABLE IF NOT EXISTS notification_confirmation (date_ DATE PRIMARY KEY DEFAULT CURRENT_DATE NOT NULL , notification_sent INTEGER DEFAULT 0);
                   ''')
 
         self.__cursor.execute('''
-                     CREATE TABLE IF NOT EXISTS sensor_data (id INTEGER PRIMARY KEY AUTOINCREMENT, notification_confirmation_id INTEGER, temperature REAL, humidity REAL, time_recorded TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, FOREIGN KEY(notification_confirmation_id) REFERENCES notification_confirmation);
+                     CREATE TABLE IF NOT EXISTS sensor_data (id INTEGER PRIMARY KEY AUTOINCREMENT, date_ DEFAULT CURRENT_DATE, temperature REAL, humidity REAL, time_recorded TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, FOREIGN KEY(date_) REFERENCES notification_confirmation);
                  ''')
 
     def insert_sensor_data(self, temperature: float, humidity: float):
-        pass
-        # self.__cursor.execute('''
-        #             INSERT INTO sensor_data VALUE ();
-        #         ''')
+        self.__cursor.execute('''
+                            INSERT INTO sensor_data (temperature, humidity) VALUES (?,?);
+                        ''', (temperature, humidity))
+        self.__db_connection.commit()
 
     def insert_notification_confirmation(self):
         self.__cursor.execute('''
                     INSERT INTO notification_confirmation (notification_sent) VALUES (0);
                 ''')
         self.__db_connection.commit()
+
+    def check_notification_sent(self):
+        self.__cursor.execute('''SELECT notification_sent FROM notification_confirmation WHERE date_ = ?''',
+                              (date.today().__str__(),))
+
+        row = self.__cursor.fetchone()
+        return row[0]
+
+    def mark_notification_sent(self):
+        self.__cursor.execute('''UPDATE notification_confirmation SET notification_sent = 1 WHERE date_ = ?''',
+                              (date.today().__str__(),))
