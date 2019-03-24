@@ -22,7 +22,7 @@ class ComputeReportGen:
 
     # checks the humidity and delivers appropriate message to be written in the csv file
     def check_humidity(self, start_date, range_, rows):
-        line ={
+        line = {
             "Date": 0,
             "Status": "OK",
             "Min_diff": 0,
@@ -32,7 +32,7 @@ class ComputeReportGen:
         for row in rows:
             if start_date == row[1]:
                 line["Date"] = row[1]
-                if row[2] < range_["min_humidity"] :
+                if row[2] < range_["min_humidity"]:
                     diff = range_["min_humidity"] - row[2]
                     if diff > line["Min_diff"]:
                         line["Min_diff"] = diff
@@ -43,13 +43,11 @@ class ComputeReportGen:
                         line["Max_diff"] = diff
                         line["Status"] = ("Bad: %d above maximum humidity" % diff)
             else:
-                print(line)
                 self.write_csv(line)
-                start_date=(row[1])
-                line["Max_diff"]=0
-                line["Min_diff"]=0
-                line["Status"]="OK"
-            print(line)
+                start_date = (row[1])
+                line["Max_diff"] = 0
+                line["Min_diff"] = 0
+                line["Status"] = "OK"
 
     # checks the Temperature and delivers appropriate message to be written in the csv file
     def check_temperature(self, start_date, range_, rows):
@@ -62,29 +60,28 @@ class ComputeReportGen:
 
         for row in rows:
             if start_date == row[1]:
-                line["Date"]=row[1]
+                line["Date"] = row[1]
                 if row[2] < range_["min_temperature"]:
                     diff = range_["min_temperature"] - row[2]
                     if diff > line["Min_diff"]:
                         line["Min_diff"] = diff
                         line["Status"] = ("Bad: %d below minimum temperature" % diff)
-                if row[2] > range_["max_temperature"] :
+                if row[2] > range_["max_temperature"]:
                     diff = row[2] - range_["max_temperature"]
                     if diff > line["Max_diff"]:
-                        line["Max_diff"]=diff
-                        line["Status"]=("Bad: %d above maximum temperature" %diff)
+                        line["Max_diff"] = diff
+                        line["Status"] = ("Bad: %d above maximum temperature" %diff)
             else:
-                print(line)
                 self.write_csv(line)
-                start_date=(row[1])
-                line["Max_diff"]=0
-                line["Min_diff"]=0
-                line["Status"]="OK"
+                start_date = (row[1])
+                line["Max_diff"] = 0
+                line["Min_diff"] = 0
+                line["Status"] = "OK"
             print(line)
 
     # Writes a single row to the csv file
     def write_csv(self, line):
-        row = [("%d" % line ["Date"] ), line["Status"]]
+        row = [("%d" % line["Date"]), line["Status"]]
         with open('report.csv', 'a') as csvFile:
             writer = csv.writer(csvFile)
             writer.writerow(row)
