@@ -1,8 +1,45 @@
-Date,Status
-Date,Status
-Date,Status
-Date,Status
-Date,Status
-Date,Status
-Date,Status
-Date,Status
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Date,Status,Reason
+2019-03-25,Bad,"['4.0 less than the minimum temperature', '24.0 more than the maximum temperature', '34.0 less than the minimum humidity']"
+Date,Status,Reason
+2019-03-25,Bad,"['4.0 less than the minimum temperature', '24.0 more than the maximum temperature', '34.0 less than the minimum humidity', '27.0 less than the maximum humidity']"
+Date,Status,Reason
+2019-03-25,Bad,"['4.0 less than the minimum temperature', '24.0 more than the maximum temperature', '34.0 less than the minimum humidity', '27.0 less than the maximum humidity']"
+Date,Status,Reason
+2019-03-25,Bad,"['4.0 less than the minimum temperature', '24.0 more than the maximum temperature', '34.0 less than the minimum humidity', '27.0 less than the maximum humidity']"

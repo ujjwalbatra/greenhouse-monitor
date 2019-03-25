@@ -8,22 +8,22 @@ class Report:
 
     # initializes the report
     def __init__(self):
-        row = ["Date", "Status"]
+        row = ["Date", "Status", "Reason"]
         with open('report.csv', 'a') as csvFile:
             writer = csv.writer(csvFile)
             writer.writerow(row)
             csvFile.close() 
     
     def test_values_db(self, db):
-        db.insert_sensor_data(25, 35)
-        db.insert_sensor_data(16, 35)
-        db.insert_sensor_data(17, 35)
-        db.insert_sensor_data(26, 36)
-        db.insert_sensor_data(44, 36)
-        db.insert_sensor_data(28, 36)
-        db.insert_sensor_data(46, 37)
-        db.insert_sensor_data(24, 37)
-        db.insert_sensor_data(28, 37)
+        db.insert_sensor_data(21, 55)
+        db.insert_sensor_data(21, 55)
+        db.insert_sensor_data(21, 55)
+        db.insert_sensor_data(21, 55)
+        db.insert_sensor_data(21, 55)
+        db.insert_sensor_data(21, 55)
+        db.insert_sensor_data(21, 55)
+        db.insert_sensor_data(21, 55)
+        db.insert_sensor_data(21, 55)
 
     # gets the range of temperature and humidity to compare
     def get_range(self):

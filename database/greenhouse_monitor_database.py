@@ -61,6 +61,33 @@ class GreenhouseMonitorDatabase(object):
     def query_to_db(self):
         self.__cursor.execute("SELECT * FROM sensor_data; ")
         rows = self.__cursor.fetchall()
-        for row in rows:
-            print(row)
+        return rows
+
+    def query_today(self):
+        self.__cursor.execute("SELECT * FROM sensor_data WHERE date_ = ?", (date.today().__str__(),))
+        rows = self.__cursor.fetchall()
+        return rows
+
+    def get_today_min_temp(self):
+        self.__cursor.execute("SELECT temperature FROM sensor_data WHERE date_ = ? order by temperature limit 1",
+                              (date.today().__str__(),))
+        rows = self.__cursor.fetchall()
+        return rows
+
+    def get_today_max_temp(self):
+        self.__cursor.execute("SELECT temperature FROM sensor_data WHERE date_ = ? order by temperature desc limit 1",
+                              (date.today().__str__(),))
+        rows = self.__cursor.fetchall()
+        return rows
+
+    def get_today_min_humidity(self):
+        self.__cursor.execute("SELECT humidity FROM sensor_data WHERE date_ = ? order by humidity limit 1",
+                              (date.today().__str__(),))
+        rows = self.__cursor.fetchall()
+        return rows
+
+    def get_today_max_humidity(self):
+        self.__cursor.execute("SELECT humidity FROM sensor_data WHERE date_ = ? order by humidity desc limit 1",
+                              (date.today().__str__(),))
+        rows = self.__cursor.fetchall()
         return rows
