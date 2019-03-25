@@ -9,6 +9,6 @@
     "file": "YOUR_DB_FILE_NAME.db"
   },
   "pushbullet": {
-    "access_tokes": "YOUR_PUSHBULLET_ACCESS_TOKEN"
+    "access_token": "o.4HQVmoWpiEd9Ontxc3haxZu87WnRzM9N"
   }
 }
