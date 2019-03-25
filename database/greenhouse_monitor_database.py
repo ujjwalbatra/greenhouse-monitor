@@ -47,12 +47,12 @@ class GreenhouseMonitorDatabase(object):
         self.__db_connection.commit()
 
     def check_notification_sent(self):
-        self.__cursor.execute('''SELECT notification_sent FROM notification_confirmation WHERE date_ = ?''',
+        self.__cursor.execute('''SELECT notification_sent FROM notification_confirmation WHERE date_ = ?;''',
                               (date.today().__str__(),))
 
         row = self.__cursor.fetchone()
         return row[0]
 
     def mark_notification_sent(self):
-        self.__cursor.execute('''UPDATE notification_confirmation SET notification_sent = 1 WHERE date_ = ?''',
+        self.__cursor.execute('''UPDATE notification_confirmation SET notification_sent = 1 WHERE date_ = ?;''',
                               (date.today().__str__(),))
