@@ -5,7 +5,6 @@ from datetime import date
 
 
 class GreenhouseMonitorDatabase(object):
-    
 
     def __init__(self):
         db_file = self.__get_database_filename()
@@ -14,6 +13,8 @@ class GreenhouseMonitorDatabase(object):
             self.__cursor = self.__db_connection.cursor()
         except Error as e:
             print(e)
+        finally:
+            self.close_connection()
 
     def __get_database_filename(self):
         with open('config.json') as json_file:
