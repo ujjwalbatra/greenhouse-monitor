@@ -25,25 +25,28 @@ class Driver(object):
         # if values out of range, if notification not already sent send it and mark it as sent in db
         if delta_temperature != 0 or delta_humidity != 0:
             title = 'Warning! Values out of range.'
-            body = 'temperature: %f  %s' % (temperature, temp_message)
-            body += '\nhumidity: %f  %s' % (humidity, humidity_message)
+            body = 'temperature: %.2f' % temperature
+            body += '\nhumidity: %.2f' % humidity
+            body += '\n\n More Information: %s %s' % (temp_message, humidity_message)
             Driver.send_notification(db, title, body)
 
-    # generates detailed temperature/humidity out of ramnge message
+    # generates detailed temperature/humidity out of range message
     @staticmethod
     def get_warning_message(delta_temperature, delta_humidity):
-
+        print(delta_temperature)
+        print(delta_humidity)
+        
         temp_message = ''
         humidity_message = ''
         if delta_temperature > 0:
-            temp_message = 'Temperature exceeding max Temperature by %f' % delta_temperature
+            temp_message = 'Temperature exceeding max Temperature by %.2f' % delta_temperature
         elif delta_temperature < 0:
-            temp_message = 'Temperature below min Temperature by %f' % math.fabs(delta_temperature)
+            temp_message = 'Temperature below min Temperature by %.2f' % math.fabs(delta_temperature)
 
         if delta_temperature > 0:
-            humidity_message = 'Humidity exceeding max Humidity by %f' % delta_temperature
+            humidity_message = 'Humidity exceeding max Humidity by %.2f' % delta_temperature
         elif delta_temperature < 0:
-            humidity_message = 'Humidity below minimum Humidity by %f' % math.fabs(delta_humidity)
+            humidity_message = 'Humidity below minimum Humidity by %.2f' % math.fabs(delta_humidity)
 
         return temp_message, humidity_message
 
