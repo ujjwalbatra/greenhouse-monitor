@@ -7,7 +7,7 @@ class ComputeReportGen:
         self.range_ = range_
         self.rows = rows
         self.generate_report(self.range_, self.rows)
-    
+
     def generate_report(self, range_, rows):
         start_date = self.get_first_date(rows)
         print(start_date)
@@ -37,7 +37,7 @@ class ComputeReportGen:
                     if diff > line["Min_diff"]:
                         line["Min_diff"] = diff
                         line["Status"] = ("Bad: %d below minimum humidity" % diff)
-                if row[2] > range_["max_humidity"] :
+                if row[2] > range_["max_humidity"]:
                     diff = row[2] - range_["max_humidity"]
                     if diff > line["Max_diff"]:
                         line["Max_diff"] = diff
@@ -51,7 +51,7 @@ class ComputeReportGen:
 
     # checks the Temperature and delivers appropriate message to be written in the csv file
     def check_temperature(self, start_date, range_, rows):
-        line ={
+        line = {
             "Date": 0,
             "Status": "OK",
             "Min_diff": 0,
@@ -70,7 +70,7 @@ class ComputeReportGen:
                     diff = row[2] - range_["max_temperature"]
                     if diff > line["Max_diff"]:
                         line["Max_diff"] = diff
-                        line["Status"] = ("Bad: %d above maximum temperature" %diff)
+                        line["Status"] = ("Bad: %d above maximum temperature" % diff)
             else:
                 self.write_csv(line)
                 start_date = (row[1])

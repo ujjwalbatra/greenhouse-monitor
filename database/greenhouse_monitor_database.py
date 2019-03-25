@@ -27,11 +27,14 @@ class GreenhouseMonitorDatabase(object):
 
     def create_tables(self):
         self.__cursor.execute('''
-                        CREATE TABLE IF NOT EXISTS notification_confirmation (date_ DATE PRIMARY KEY DEFAULT CURRENT_DATE NOT NULL , notification_sent INTEGER DEFAULT 0);
+                        CREATE TABLE IF NOT EXISTS notification_confirmation 
+                         (date_ DATE PRIMARY KEY DEFAULT CURRENT_DATE NOT NULL , notification_sent INTEGER DEFAULT 0);
                   ''')
 
         self.__cursor.execute('''
-                     CREATE TABLE IF NOT EXISTS sensor_data (id INTEGER PRIMARY KEY AUTOINCREMENT, date_ DEFAULT CURRENT_DATE, temperature REAL, humidity REAL, time_recorded TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, FOREIGN KEY(date_) REFERENCES notification_confirmation);
+                     CREATE TABLE IF NOT EXISTS sensor_data 
+                      (id INTEGER PRIMARY KEY AUTOINCREMENT, date_ DEFAULT CURRENT_DATE, temperature REAL, humidity REAL, 
+                        time_recorded TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, FOREIGN KEY(date_) REFERENCES notification_confirmation);
                  ''')
 
     def insert_sensor_data(self, temperature: float, humidity: float):
