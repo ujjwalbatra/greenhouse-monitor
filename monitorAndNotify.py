@@ -3,6 +3,7 @@ from notification import pushbullet
 from sense_hat_monitoring import sensor_data
 import time
 from sqlite3 import Error
+import math
 
 
 class Driver(object):
@@ -13,17 +14,38 @@ class Driver(object):
         temperature = temperature_humidity.get_temperature()
         humidity = temperature_humidity.get_humidity()
 
-        #  log temp and humidity to db
+        # log temp and humidity to db
         db.insert_sensor_data(temperature, humidity)
 
-        temp_in_range = temperature_humidity.check_temperature_in_range()
-        humid_in_range = temperature_humidity.check_humidity_in_range()
+        delta_temperature = temperature_humidity.get_delta_temperature()
+        delta_humidity = temperature_humidity.get_delta_humidity()
 
-        #  if values out of range, if notification not already sent send it and mark it as sent in db
-        if (not temp_in_range) or (not humid_in_range):
-            title = "Warning! Values out of range."
-            body = 'Value out of range: \n\ttemperature: %f\n\thumidity: %f' % (temperature, humidity)
+        temp_message, humidity_message = Driver.get_warning_message(delta_temperature, delta_humidity)
+
+        # if values out of range, if notification not already sent send it and mark it as sent in db
+        if delta_temperature != 0 or delta_humidity != 0:
+            title = 'Warning! Values out of range.'
+            body = 'temperature: %f  %s' % (temperature, temp_message)
+            body += '\nhumidity: %f  %s' % (humidity, humidity_message)
             Driver.send_notification(db, title, body)
+
+    # generates detailed temperature/humidity out of ramnge message
+    @staticmethod
+    def get_warning_message(delta_temperature, delta_humidity):
+
+        temp_message = ''
+        humidity_message = ''
+        if delta_temperature > 0:
+            temp_message = 'Temperature exceeding max Temperature by %f' % delta_temperature
+        elif delta_temperature < 0:
+            temp_message = 'Temperature below min Temperature by %f' % math.fabs(delta_temperature)
+
+        if delta_temperature > 0:
+            humidity_message = 'Humidity exceeding max Humidity by %f' % delta_temperature
+        elif delta_temperature < 0:
+            humidity_message = 'Humidity below minimum Humidity by %f' % math.fabs(delta_humidity)
+
+        return temp_message, humidity_message
 
     @staticmethod
     def send_notification(db, title, body):
