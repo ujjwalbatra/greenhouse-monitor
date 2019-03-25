@@ -16,7 +16,7 @@ class Driver(object):
 
         # log temp and humidity to db
         db.insert_sensor_data(temperature, humidity)
-
+    
         delta_temperature = temperature_humidity.get_delta_temperature()
         delta_humidity = temperature_humidity.get_delta_humidity()
 
@@ -33,19 +33,17 @@ class Driver(object):
     # generates detailed temperature/humidity out of range message
     @staticmethod
     def get_warning_message(delta_temperature, delta_humidity):
-        print(delta_temperature)
-        print(delta_humidity)
-        
         temp_message = ''
         humidity_message = ''
+
         if delta_temperature > 0:
             temp_message = 'Temperature exceeding max Temperature by %.2f' % delta_temperature
         elif delta_temperature < 0:
             temp_message = 'Temperature below min Temperature by %.2f' % math.fabs(delta_temperature)
 
-        if delta_temperature > 0:
-            humidity_message = 'Humidity exceeding max Humidity by %.2f' % delta_temperature
-        elif delta_temperature < 0:
+        if delta_humidity > 0:
+            humidity_message = 'Humidity exceeding max Humidity by %.2f' % delta_humidity
+        elif delta_humidity < 0:
             humidity_message = 'Humidity below minimum Humidity by %.2f' % math.fabs(delta_humidity)
 
         return temp_message, humidity_message
