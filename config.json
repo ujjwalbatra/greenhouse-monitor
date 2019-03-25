@@ -1,14 +1,16 @@
 {
   "data_range": {
-    "min_temperature": 20,
-    "max_temperature": 22,
-    "min_humidity": 50,
-    "max_humidity": 60
+    "min_temperature": 30,
+    "max_temperature": 40,
+    "min_humidity": 70,
+    "max_humidity": 80
   },
   "sqlite3": {
-    "file": "YOUR_DB_FILE_NAME.db"
+    "file": "greenhouse_data.db"
   },
   "pushbullet": {
-    "access_token": "o.4HQVmoWpiEd9Ontxc3haxZu87WnRzM9N"
+
+    "access_token": "o.irAFuzgjn6N2TshmJm5ZApQxWXddQfX9"
+
   }
 }

@@ -5,7 +5,6 @@ from datetime import date
 
 
 class GreenhouseMonitorDatabase(object):
-    
 
     def __init__(self):
         db_file = self.__get_database_filename()
@@ -14,6 +13,8 @@ class GreenhouseMonitorDatabase(object):
             self.__cursor = self.__db_connection.cursor()
         except Error as e:
             print(e)
+        finally:
+            self.close_connection()
 
     def __get_database_filename(self):
         with open('config.json') as json_file:
@@ -46,14 +47,14 @@ class GreenhouseMonitorDatabase(object):
         self.__db_connection.commit()
 
     def check_notification_sent(self):
-        self.__cursor.execute('''SELECT notification_sent FROM notification_confirmation WHERE date_ = ?''',
+        self.__cursor.execute('''SELECT notification_sent FROM notification_confirmation WHERE date_ = ?;''',
                               (date.today().__str__(),))
 
         row = self.__cursor.fetchone()
         return row[0]
 
     def mark_notification_sent(self):
-        self.__cursor.execute('''UPDATE notification_confirmation SET notification_sent = 1 WHERE date_ = ?''',
+        self.__cursor.execute('''UPDATE notification_confirmation SET notification_sent = 1 WHERE date_ = ?;''',
                               (date.today().__str__(),))
 
     # query the database of all values
