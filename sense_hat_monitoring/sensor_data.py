@@ -61,7 +61,7 @@ class SensorData(ReadTemperature, ReadHumidity):
             max_humidity = data['data_range']['max_humidity']
 
         if max_humidity < self.__humidity:
-            delta_humidity = self.__temperature - max_humidity
+            delta_humidity = self.__humidity - max_humidity
             return delta_humidity
         elif min_humidity > self.__humidity:
             delta_humidity = min_humidity - self.__humidity
