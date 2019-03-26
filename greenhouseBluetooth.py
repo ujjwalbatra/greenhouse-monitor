@@ -39,6 +39,7 @@ class BlueToothNotify:
 
         reason = ''.join(reasons)
 
+
         if status == "Bad":
             pb = PushBullet("Warning!", reason)
             pb.send_notification()
