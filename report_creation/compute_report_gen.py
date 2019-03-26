@@ -72,19 +72,21 @@ class ComputeReportGen:
         reasons = []
         if line["Min_temp_diff"] != 0:
             status = "Bad"
-            reasons.append("%s less than the minimum temperature" % line["Min_temp_diff"])
+            reasons.append("%s less than the minimum temperature. " % line["Min_temp_diff"])
         if line["Max_temp_diff"] != 0:
             status = "Bad"
-            reasons.append("%s more than the maximum temperature" % line["Max_temp_diff"])
+            reasons.append("%s more than the maximum temperature. " % line["Max_temp_diff"])
         if line["Min_humidity_diff"] != 0:
             status = "Bad"
-            reasons.append("%s less than the minimum humidity" % line["Min_humidity_diff"])
+            reasons.append("%s less than the minimum humidity. " % line["Min_humidity_diff"])
         if line["Max_humidity_diff"] != 0:
             status = "Bad"
-            reasons.append("%s less than the maximum humidity" % line["Max_humidity_diff"])
+            reasons.append("%s less than the maximum humidity. " % line["Max_humidity_diff"])
 
-        row = date, status, reasons
+        reason = ''.join(reasons)
+
+        row = date, status, reason
         with open('report.csv', 'a') as csvFile:
             writer = csv.writer(csvFile)
             writer.writerow(row)
-            csvFile.close()
+            csvFile.close
