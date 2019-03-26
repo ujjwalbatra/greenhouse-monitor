@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from database import greenhouse_monitor_database
 from notification import pushbullet
 from sense_hat_monitoring import sensor_data
@@ -57,6 +59,7 @@ class Driver(object):
             notification_sender = pushbullet.PushBullet(title, body)
             notification_sender.send_notification()
             #  mark notification sent status in db
+            print("notification sent")
             db.mark_notification_sent()
 
     @staticmethod
@@ -70,10 +73,7 @@ class Driver(object):
 
         minutes = 120
 
-        # every minute for 2 hours
-        for i in range(minutes):
-            Driver.monitor_and_notify(db)
-            time.sleep(60)
+        Driver.monitor_and_notify(db)
 
         db.close_connection()
 

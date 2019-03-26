@@ -24,7 +24,7 @@ class SensorData(ReadTemperature, ReadHumidity):
         sense.clear()
         self.__temperature = self.get_current_temperature(sense)
         self.__humidity = self.get_current_humidity(sense)
-
+     
     def get_current_temperature(self, sense):
         return sense.get_temperature()
 

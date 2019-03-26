@@ -57,9 +57,11 @@ class GreenhouseMonitorDatabase(object):
         return row[0]
 
     def mark_notification_sent(self):
+        current_date = date.today().__str__()
         self.__cursor.execute('''UPDATE notification_confirmation SET notification_sent = 1 WHERE date_ = ?;''',
-                              (date.today().__str__(),))
-
+                (current_date,))
+        self.__db_connection.commit()
+       
     # query the database of all values
     def query_to_db(self):
         self.__cursor.execute("SELECT * FROM sensor_data; ")
