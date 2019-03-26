@@ -12,18 +12,7 @@ class Report:
         with open('report.csv', 'a') as csvFile:
             writer = csv.writer(csvFile)
             writer.writerow(row)
-            csvFile.close() 
-    
-    def test_values_db(self, db):
-        db.insert_sensor_data(21, 55)
-        db.insert_sensor_data(21, 55)
-        db.insert_sensor_data(21, 55)
-        db.insert_sensor_data(21, 55)
-        db.insert_sensor_data(21, 55)
-        db.insert_sensor_data(21, 55)
-        db.insert_sensor_data(21, 55)
-        db.insert_sensor_data(21, 55)
-        db.insert_sensor_data(21, 55)
+            csvFile.close()
 
     # gets the range of temperature and humidity to compare
     def get_range(self):
@@ -33,11 +22,8 @@ class Report:
     
     def main(self):
         db = greenhouse_monitor_database.GreenhouseMonitorDatabase()
-        db.create_tables()
-        self.test_values_db(db)
         range_ = self.get_range()
         rows = db.query_to_db()
-        
         compute_report_gen.ComputeReportGen(range_, rows)
 
 
