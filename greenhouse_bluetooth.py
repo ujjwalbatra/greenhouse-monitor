@@ -2,12 +2,12 @@ from notification.pushbullet import PushBullet
 import threading
 import json
 from database.greenhouse_monitor_database import GreenhouseMonitorDatabase
-# import bluetooth
+import bluetooth
 
 
 class BlueToothNotify:
 
-    def check_temp_humidity(self, range_, rows):
+    def check_temp_humidity(self, range_):
         line = {
             "Min_temp_diff": 0,
             "Max_temp_diff": 0,
@@ -53,16 +53,14 @@ class BlueToothNotify:
 
 class GreenHouseBluetooth(threading.Thread):
     def run(self):
-        # nearby_devices = bluetooth.discover_devices(lookup_names=True)
-        # trusted_devices = "Galaxy_S10"
-        #
-        # for addr, name in nearby_devices:
-        #     if name == trusted_devices:
-                notify = BlueToothNotify()
-                db = GreenhouseMonitorDatabase()
+        nearby_devices = bluetooth.discover_devices(lookup_names=True)
+        trusted_devices = "Galaxy_S10"
 
-                rows = db.query_today()
-                notify.check_temp_humidity(self.get_range(), rows)
+        for addr, name in nearby_devices:
+            if name == trusted_devices:
+                notify = BlueToothNotify()
+
+                notify.check_temp_humidity(self.get_range())
 
     def get_range(self):
         with open('config.json') as json_file:

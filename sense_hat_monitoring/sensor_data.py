@@ -37,24 +37,28 @@ class SensorData(ReadTemperature, ReadHumidity):
     def get_humidity(self):
         return self.__humidity
 
-    def check_temperature_in_range(self):
+    def get_temperature_difference(self):
         with open('config.json') as json_file:
             data = json.load(json_file)
             min_temp = data['data_range']['min_temperature']
             max_temp = data['data_range']['max_temperature']
 
-        if max_temp > self.__temperature > min_temp:
-            return True
+        if max_temp < self.__temperature:
+            return self.__temperature - max_temp
+        elif min_temp > self.__temperature:
+            return self.__temperature - min_temp
         else:
-            return False
+            return 0
 
-    def check_humidity_in_range(self):
+    def get_humidity_difference(self):
         with open('config.json') as json_file:
             data = json.load(json_file)
             min_humidity = data['data_range']['min_humidity']
             max_humidity = data['data_range']['max_humidity']
 
-        if max_humidity > self.__humidity > min_humidity:
-            return True
+        if max_humidity < self.__humidity:
+            return self.__humidity - max_humidity
+        elif min_humidity > self.__humidity:
+            return self.__humidity - min_humidity
         else:
-            return False
+            return 0

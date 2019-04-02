@@ -5,7 +5,7 @@ import time
 from sqlite3 import Error
 
 
-class Driver(object):
+class MonitorAndNotify(object):
     @staticmethod
     def monitor_and_notify(db):
         temperature_humidity = sensor_data.SensorData()
@@ -16,14 +16,31 @@ class Driver(object):
         # log temp and humidity to db
         db.insert_sensor_data(temperature, humidity)
 
-        temp_in_range = temperature_humidity.check_temperature_in_range()
-        humid_in_range = temperature_humidity.check_humidity_in_range()
+        delta_temp = temperature_humidity.get_temperature_difference()
+        delta_humidity = temperature_humidity.get_humidity_difference()
 
         # if values out of range, if notification not already sent send it and mark it as sent in db
-        if (not temp_in_range) or (not humid_in_range):
+        if (delta_temp != 0) or (delta_humidity != 0):
             title = "Warning! Values out of range."
-            body = 'Value out of range: \n\ttemperature: %f\n\thumidity: %f' % (temperature, humidity)
-            Driver.send_notification(db, title, body)
+            body = 'Value out of range: \n\ttemperature: %.2f *c\n\thumidity: %.2f %%rH\n\n' % (temperature, humidity)
+            body += MonitorAndNotify.get_notification_detail(delta_temp, delta_humidity)
+            MonitorAndNotify.send_notification(db, title, body)
+
+    @staticmethod
+    def get_notification_detail(delta_temperature, delta_humidity):
+        detail = ''
+
+        if delta_temperature > 0:
+            detail = '\nTemperature above maximum temperature by %.2f *c' % (delta_temperature,)
+        elif delta_temperature < 0:
+            detail = '\nTemperature below minimum temperature by %.2f *c' % (-delta_temperature,)
+
+        if delta_humidity > 0:
+            detail += '\nHumidity above maximum Humidity by %.2f %%rH' % (delta_humidity,)
+        elif delta_humidity < 0:
+            detail += '\nHumidity below minimum Humidity by %.2f %%rH' % (-delta_humidity,)
+
+        return detail
 
     @staticmethod
     def send_notification(db, title, body):
@@ -49,11 +66,11 @@ class Driver(object):
 
         # every minute for 2 hours
         for i in range(minutes):
-            Driver.monitor_and_notify(db)
+            MonitorAndNotify.monitor_and_notify(db)
             time.sleep(60)
 
         db.close_connection()
 
 
 if __name__ == '__main__':
-    Driver.main()
+    MonitorAndNotify.main()

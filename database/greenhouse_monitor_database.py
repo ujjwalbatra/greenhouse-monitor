@@ -13,8 +13,8 @@ class GreenhouseMonitorDatabase(object):
             self.__cursor = self.__db_connection.cursor()
         except Error as e:
             print(e)
-        finally:
-            self.close_connection()
+        # finally:
+        #     self.close_connection()
 
     def __get_database_filename(self):
         with open('config.json') as json_file:
@@ -27,11 +27,11 @@ class GreenhouseMonitorDatabase(object):
 
     def create_tables(self):
         self.__cursor.execute('''
-                        CREATE TABLE IF NOT EXISTS notification_confirmation (date_ DATE PRIMARY KEY DEFAULT CURRENT_DATE NOT NULL , notification_sent INTEGER DEFAULT 0);
+                        CREATE TABLE IF NOT EXISTS notification_confirmation (date_ DATE PRIMARY KEY DEFAULT (datetime('now','localtime'))  NOT NULL , notification_sent INTEGER DEFAULT 0);
                   ''')
 
         self.__cursor.execute('''
-                     CREATE TABLE IF NOT EXISTS sensor_data (id INTEGER PRIMARY KEY AUTOINCREMENT, date_ DEFAULT CURRENT_DATE, temperature REAL, humidity REAL, time_recorded TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, FOREIGN KEY(date_) REFERENCES notification_confirmation);
+                     CREATE TABLE IF NOT EXISTS sensor_data (id INTEGER PRIMARY KEY AUTOINCREMENT, date_ DEFAULT CURRENT_DATE, temperature REAL, humidity REAL, time_recorded  DEFAULT (datetime('now','localtime')) NOT NULL, FOREIGN KEY(date_) REFERENCES notification_confirmation);
                  ''')
 
     def insert_sensor_data(self, temperature: float, humidity: float):
@@ -56,15 +56,11 @@ class GreenhouseMonitorDatabase(object):
     def mark_notification_sent(self):
         self.__cursor.execute('''UPDATE notification_confirmation SET notification_sent = 1 WHERE date_ = ?;''',
                               (date.today().__str__(),))
+        self.__db_connection.commit()
 
     # query the database of all values
-    def query_to_db(self):
+    def get_all_sensor_data(self):
         self.__cursor.execute("SELECT * FROM sensor_data; ")
-        rows = self.__cursor.fetchall()
-        return rows
-
-    def query_today(self):
-        self.__cursor.execute("SELECT * FROM sensor_data WHERE date_ = ?", (date.today().__str__(),))
         rows = self.__cursor.fetchall()
         return rows
 
