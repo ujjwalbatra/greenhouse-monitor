@@ -3,6 +3,11 @@ from notification import pushbullet
 from sense_hat_monitoring import sensor_data
 import time
 from sqlite3 import Error
+import logging
+
+logging.basicConfig(filename="greenhouse.log", filemode='w', datefmt='%d-%b-%y %H:%M:%S',
+                    format='%(name)s - %(levelname)s - %(message)s',
+                    level=logging.ERROR)
 
 
 class MonitorAndNotify(object):
@@ -44,7 +49,13 @@ class MonitorAndNotify(object):
 
     @staticmethod
     def send_notification(db, title, body):
-        notification_sent = db.check_notification_sent()
+
+        # if the date changes when program is in execution, insert new row in db for the new date
+        try:
+            notification_sent = db.check_notification_sent()
+        except Error:
+            db.insert_notification_confirmation()
+            notification_sent = False
 
         # send notification only if not sent earlier on same date
         if notification_sent == 0:
@@ -57,19 +68,18 @@ class MonitorAndNotify(object):
     def main():
         db = greenhouse_monitor_database.GreenhouseMonitorDatabase()
         db.create_tables()
+
+        minutes = 1000
+
         try:
             db.insert_notification_confirmation()
-        except Error:  # ignore error here, error here means that the row is already inserted
-            pass
-
-        minutes = 120
-
-        # every minute for 2 hours
-        for i in range(minutes):
-            MonitorAndNotify.monitor_and_notify(db)
-            time.sleep(60)
-
-        db.close_connection()
+            for i in range(minutes):
+                MonitorAndNotify.monitor_and_notify(db)
+                time.sleep(60)
+        except Error as e:
+            logging.warning(e.__str__())
+        finally:
+            db.close_connection()
 
 
 if __name__ == '__main__':
