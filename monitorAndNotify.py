@@ -76,7 +76,9 @@ class MonitorAndNotify(object):
             for i in range(minutes):
                 MonitorAndNotify.monitor_and_notify(db)
                 time.sleep(60)
-        except Error as e:
+        except Error as e:  # database exceptions
+            logging.warning(e.__str__())
+        except Exception as e:  # any other exceptions
             logging.warning(e.__str__())
         finally:
             db.close_connection()
