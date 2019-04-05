@@ -18,6 +18,6 @@ class PushBullet(object):
                       auth=(self.__access_token, ''))
 
     def __initialise_pushbullet_access_token(self):
-        with open('config.json') as json_file:
+        with open('/home/pi/greenhouse_monitor/config.json') as json_file:
             data = json.load(json_file)
             self.__access_token = data['pushbullet']['access_token']

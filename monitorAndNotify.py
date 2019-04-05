@@ -1,13 +1,13 @@
+#!/usr/bin/env python3
 from database import greenhouse_monitor_database
 from notification import pushbullet
 from sense_hat_monitoring import sensor_data
 import time
+from datetime import datetime
 from sqlite3 import Error
 import logging
 
-logging.basicConfig(filename="greenhouse.log", filemode='w', datefmt='%d-%b-%y %H:%M:%S',
-                    format='%(name)s - %(levelname)s - %(message)s',
-                    level=logging.ERROR)
+logging.basicConfig(filename="/home/pi/greenhouse_monitor/greenhouse.log", filemode='a',level=logging.DEBUG)
 
 
 class MonitorAndNotify(object):
@@ -72,16 +72,16 @@ class MonitorAndNotify(object):
             db.insert_notification_confirmation()
         except:
             pass  # ignore error here
+
         try:
+        
             while True:
                 MonitorAndNotify.monitor_and_notify(db)
                 time.sleep(60)
         except Error as e:  # database exceptions
-            logging.warning(e.__str__())
-            print(e)
+            logging.warning(e.__str__() + " " + datetime.now().__str__())
         except Exception as e:  # any other exceptions
-            logging.warning(e.__str__())
-            print(e)
+            logging.warning(e.__str__() + " " + datetime.now().__str__())
         finally:
             db.close_connection()
 
