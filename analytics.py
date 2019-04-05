@@ -1,13 +1,10 @@
 from database import greenhouse_monitor_database
-from bokeh.plotting import figure, output_file, show
-from bokeh.models import Title
-from bokeh.io import export_png
+import matplotlib.pyplot as plt
 
 import logging
 from decimal import Decimal
 
-
-# logging.basicConfig(filename="/home/pi/greenhouse_monitor/logs/analytics.log", filemode='a', level=logging.DEBUG)
+logging.basicConfig(filename="logs/analytics.log", filemode='a', level=logging.DEBUG)
 
 
 class Analytics(object):
@@ -28,6 +25,7 @@ class Analytics(object):
             temp_db = Decimal(row[2])
             humidity_db = Decimal(row[3])
 
+            # rounding off temp/humidity to 2 places after the decimal
             temperature.append(round(temp_db, 2))
             humidity.append(round(humidity_db, 2))
 
@@ -35,21 +33,14 @@ class Analytics(object):
         self.__formatted_humidity = humidity
 
     def __generate_scatter_plot(self):
-        plot = figure(plot_width=1200, plot_height=1200)
+        plt.scatter(self.__formatted_temperature, self.__formatted_humidity, 8, "navy", alpha=0.5)
 
-        # format main title
-        plot.title.text = "Temperature vs Humidity"
-        plot.title.text_color = "black"
-        plot.title.text_font_size = "28px"
+        # setting labels and title
+        plt.xlabel("Temprature (*c)")
+        plt.ylabel("Humidity (%rH)")
+        plt.title("Temperature vs Humidity")
 
-        # add extra titles
-        plot.add_layout(Title(text="Humidity (%rH)", align="center"), "left")
-        plot.add_layout(Title(text="Temperature (*c)", align="center"), "below")
-
-        # add a circle renderer with a size, color, and alpha
-        plot.circle(self.__formatted_temperature, self.__formatted_humidity, size=8, color="navy", alpha=0.5)
-
-        export_png(plot, filename="scatter_plot.png")
+        plt.savefig('scatter_plot.png')
 
     def generate_graph(self):
         self.__get_data_from_db()
@@ -58,5 +49,8 @@ class Analytics(object):
 
 
 if __name__ == "__main__":
-    analyse = Analytics()
-    analyse.generate_graph()
+    try:
+        analyse = Analytics()
+        analyse.generate_graph()
+    except Exception as e:
+        logging.warning(e.__str__() + " " + datetime.now().__str__())
