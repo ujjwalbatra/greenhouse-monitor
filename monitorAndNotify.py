@@ -68,18 +68,20 @@ class MonitorAndNotify(object):
     def main():
         db = greenhouse_monitor_database.GreenhouseMonitorDatabase()
         db.create_tables()
-
-        minutes = 1000
-
         try:
             db.insert_notification_confirmation()
-            for i in range(minutes):
+        except:
+            pass  # ignore error here
+        try:
+            while True:
                 MonitorAndNotify.monitor_and_notify(db)
                 time.sleep(60)
         except Error as e:  # database exceptions
             logging.warning(e.__str__())
+            print(e)
         except Exception as e:  # any other exceptions
             logging.warning(e.__str__())
+            print(e)
         finally:
             db.close_connection()
 
