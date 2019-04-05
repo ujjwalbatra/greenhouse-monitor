@@ -28,31 +28,31 @@ class WriteData:
         date = start_date
 
         for row in rows:
-            if start_date == row["date_"]:
-                date = row["date_"]
-                if row["humidity"] < range_["min_humidity"]:
-                    diff = range_["min_humidity"] - row["humidity"]
+            if start_date == row[1]:
+                date = row[1]
+                if row[3] < range_["min_humidity"]:
+                    diff = range_["min_humidity"] - row[2]
                     if diff > line["Min_humidity_diff"]:
                         line["Min_humidity_diff"] = diff
 
-                if row["humidity"] > range_["max_humidity"]:
-                    diff = row["humidity"] - range_["max_humidity"]
+                if row[3] > range_["max_humidity"]:
+                    diff = row[3] - range_["max_humidity"]
                     if diff > line["Max_humidity_diff"]:
                         line["Max_humidity_diff"] = diff
 
-                if row["temperature"] < range_["min_temperature"]:
-                    diff = range_["min_temperature"] - row["temperature"]
+                if row[2] < range_["min_temperature"]:
+                    diff = range_["min_temperature"] - row[2]
                     if diff > line["Min_temp_diff"]:
                         line["Min_temp_diff"] = diff
 
-                if row["temperature"] > range_["max_temperature"]:
-                    diff = row["temperature"] - range_["max_temperature"]
+                if row[2] > range_["max_temperature"]:
+                    diff = row[2] - range_["max_temperature"]
                     if diff > line["Max_temp_diff"]:
                         line["Max_temp_diff"] = diff
 
             else:
                 self.__write_csv(date, line)
-                start_date = (row["date_"])
+                start_date = (row[1])
                 line["Max_humidity_diff"] = 0
                 line["Min_temp_diff"] = 0
                 line["Max_temp_diff"] = 0
