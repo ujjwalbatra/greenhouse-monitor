@@ -18,6 +18,7 @@ class Analytics(object):
     def __get_data_from_db(self):
         db_conn = greenhouse_monitor_database.GreenhouseMonitorDatabase()
         self.__raw_data = db_conn.get_all_sensor_data()
+        db_conn.close_connection()
 
     def __format_data(self):
         temperature = []
