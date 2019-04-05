@@ -68,5 +68,6 @@ class GreenHouseBluetooth(threading.Thread):
             return data['data_range']
 
 
-t = GreenHouseBluetooth()
-t.start()
+if __name__ == '__main__':
+    bluetooth_notifications = GreenHouseBluetooth()
+    bluetooth_notifications.start()
