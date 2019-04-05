@@ -15,7 +15,7 @@ class GreenhouseMonitorDatabase(object):
             print(e)
 
     def __get_database_filename(self):
-        with open('/home/pi/greenhouse_monitor/config.json') as json_file:
+        with open('config.json') as json_file:
             data = json.load(json_file)
             return data['sqlite3']['file']
 

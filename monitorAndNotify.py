@@ -7,7 +7,7 @@ from datetime import datetime
 from sqlite3 import Error
 import logging
 
-logging.basicConfig(filename="/home/pi/greenhouse_monitor/greenhouse.log", filemode='a',level=logging.DEBUG)
+logging.basicConfig(filename="./logs/greenhouse.log", filemode='a',level=logging.DEBUG)
 
 
 class MonitorAndNotify(object):

@@ -38,7 +38,7 @@ class SensorData(ReadTemperature, ReadHumidity):
         return self.__humidity
 
     def get_temperature_difference(self):
-        with open('/home/pi/greenhouse_monitor/config.json') as json_file:
+        with open('config.json') as json_file:
             data = json.load(json_file)
             min_temp = data['data_range']['min_temperature']
             max_temp = data['data_range']['max_temperature']
@@ -51,7 +51,7 @@ class SensorData(ReadTemperature, ReadHumidity):
             return 0
 
     def get_humidity_difference(self):
-        with open('/home/pi/greenhouse_monitor/config.json') as json_file:
+        with open('config.json') as json_file:
             data = json.load(json_file)
             min_humidity = data['data_range']['min_humidity']
             max_humidity = data['data_range']['max_humidity']
