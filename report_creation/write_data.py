@@ -87,23 +87,23 @@ class WriteData:
         reasons = []
         if line["min_temp_diff"] != 0:
             status = "Bad"
-            min_temp_time = time(time_of_occurance["min_temp_time"]).strftime("%H:%M:%S")
+            min_temp_time = time_of_occurance["min_temp_time"]
             reasons.append("%.2f less than the minimum temperature at %s. " %
                            (float(line["min_temp_diff"]), min_temp_time))
         if line["max_temp_diff"] != 0:
             status = "Bad"
-            max_temp_time = time(time_of_occurance["max_temp_time"]).strftime("%H:%M:%S")
-            reasons.append("%.2f more than the maximum temperature %s. " %
+            max_temp_time = time_of_occurance["max_temp_time"]
+            reasons.append("%.2f more than the maximum temperature at %s. " %
                            (float(line["max_temp_diff"]), max_temp_time))
         if line["min_humidity_diff"] != 0:
             status = "Bad"
-            min_humidity_time = time(time_of_occurance["min_humidity_time"]).strftime("%H:%M:%S")
-            reasons.append("%.2f less than the minimum humidity %s. " %
+            min_humidity_time = time_of_occurance["min_humidity_time"]
+            reasons.append("%.2f less than the minimum humidity at %s. " %
                            (float(line["min_humidity_diff"]), min_humidity_time))
         if line["max_humidity_diff"] != 0:
             status = "Bad"
-            max_humidity_time = time(time_of_occurance["max_humidity_time"]).strftime("%H:%M:%S")
-            reasons.append("%.2f less than the maximum humidity %s. " %
+            max_humidity_time = time_of_occurance["max_humidity_time"]
+            reasons.append("%.2f less than the maximum humidity at %s. " %
                            (float(line["max_humidity_diff"]), max_humidity_time))
 
         reason = ''.join(reasons)
