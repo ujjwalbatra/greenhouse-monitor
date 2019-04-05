@@ -1,4 +1,5 @@
 import csv
+from datetime import time
 
 
 class WriteData:
@@ -20,11 +21,19 @@ class WriteData:
     def __check_humidity_temperature(self, start_date, range_, rows):
 
         line = {
-            "Min_temp_diff": 0,
-            "Max_temp_diff": 0,
-            "Min_humidity_diff": 0,
-            "Max_humidity_diff": 0
+            "min_temp_diff": 0,
+            "max_temp_diff": 0,
+            "min_humidity_diff": 0,
+            "max_humidity_diff": 0,
         }
+
+        time_of_occurance = {
+            "min_temp_time": None,
+            "max_temp_time": None,
+            "min_humidity_time": None,
+            "max_humidity_time": None,
+        }
+
         date = start_date
 
         for row in rows:
@@ -32,53 +41,66 @@ class WriteData:
                 date = row[1]
                 if row[3] < range_["min_humidity"]:
                     diff = range_["min_humidity"] - row[2]
-                    if diff > line["Min_humidity_diff"]:
-                        line["Min_humidity_diff"] = diff
+                    if diff > line["min_humidity_diff"]:
+                        line["min_humidity_diff"] = diff
+                        time_of_occurance["min_humidity_time"] = row[4]
 
                 if row[3] > range_["max_humidity"]:
                     diff = row[3] - range_["max_humidity"]
-                    if diff > line["Max_humidity_diff"]:
-                        line["Max_humidity_diff"] = diff
+                    if diff > line["max_humidity_diff"]:
+                        line["max_humidity_diff"] = diff
+                        time_of_occurance["max_humidity_time"] = row[4]
 
                 if row[2] < range_["min_temperature"]:
                     diff = range_["min_temperature"] - row[2]
-                    if diff > line["Min_temp_diff"]:
-                        line["Min_temp_diff"] = diff
+                    if diff > line["min_temp_diff"]:
+                        line["min_temp_diff"] = diff
+                        time_of_occurance["min_temp_time"] = row[4]
 
                 if row[2] > range_["max_temperature"]:
                     diff = row[2] - range_["max_temperature"]
-                    if diff > line["Max_temp_diff"]:
-                        line["Max_temp_diff"] = diff
+                    if diff > line["max_temp_diff"]:
+                        line["max_temp_diff"] = diff
+                        time_of_occurance["max_temp_time"] = row[4]
+
 
             else:
                 self.__write_csv(date, line)
                 start_date = (row[1])
-                line["Max_humidity_diff"] = 0
-                line["Min_temp_diff"] = 0
-                line["Max_temp_diff"] = 0
-                line["Min_humidity_diff"] = 0
+                line["max_humidity_diff"] = 0
+                line["min_temp_diff"] = 0
+                line["max_temp_diff"] = 0
+                line["min_humidity_diff"] = 0
+                time_of_occurance["min_humidity_time"] = None
+                time_of_occurance["max_temp_time"] = None
+                time_of_occurance["min_temp_time"] = None
+                time_of_occurance["max_humidity_time"] = None
 
             # write the last row
             if rows[-1] == row:
-                self.__write_csv(date, line)
+                self.__write_csv(date, line, time_of_occurance)
 
     # Writes a single row to the csv file
-    def __write_csv(self, date, line):
+    def __write_csv(self, date, line, time_of_occurance):
 
         status = "OK"
         reasons = []
-        if line["Min_temp_diff"] != 0:
+        if line["min_temp_diff"] != 0:
             status = "Bad"
-            reasons.append("%.2f less than the minimum temperature. " % float(line["Min_temp_diff"]))
-        if line["Max_temp_diff"] != 0:
+            reasons.append("%.2f less than the minimum temperature at %s. " %
+                           (float(line["min_temp_diff"]), time_of_occurance["min_temp_time"]))
+        if line["max_temp_diff"] != 0:
             status = "Bad"
-            reasons.append("%.2f more than the maximum temperature. " % float(line["Max_temp_diff"]))
-        if line["Min_humidity_diff"] != 0:
+            reasons.append("\n%.2f more than the maximum temperature %s. " %
+                           (float(line["max_temp_diff"]), time_of_occurance["max_temp_time"]))
+        if line["min_humidity_diff"] != 0:
             status = "Bad"
-            reasons.append("%.2f less than the minimum humidity. " % float(line["Min_humidity_diff"]))
-        if line["Max_humidity_diff"] != 0:
+            reasons.append("\n%.2f less than the minimum humidity %s. " %
+                           (float(line["min_humidity_diff"]), time_of_occurance["min_humidity_time"]))
+        if line["max_humidity_diff"] != 0:
             status = "Bad"
-            reasons.append("%.2f less than the maximum humidity. " % float(line["Max_humidity_diff"]))
+            reasons.append("\n%.2f less than the maximum humidity %s. " %
+                           (float(line["max_humidity_diff"]), time_of_occurance["max_humidity_time"]))
 
         reason = ''.join(reasons)
 
