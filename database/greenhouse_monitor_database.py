@@ -58,7 +58,7 @@ class GreenhouseMonitorDatabase(object):
 
     # query the database of all values
     def get_all_sensor_data(self):
-        self.__cursor.execute("SELECT * FROM sensor_data; ")
+        self.__cursor.execute("SELECT id, date_, temperature, humidity FROM sensor_data; ")
         rows = self.__cursor.fetchall()
         return rows
 
