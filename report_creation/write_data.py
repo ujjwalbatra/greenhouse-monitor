@@ -65,7 +65,7 @@ class WriteData:
 
 
             else:
-                self.__write_csv(date, line)
+                self.__write_csv(date, line, time_of_occurance)
                 start_date = (row[1])
                 line["max_humidity_diff"] = 0
                 line["min_temp_diff"] = 0
