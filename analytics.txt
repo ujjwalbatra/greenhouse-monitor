@@ -1,0 +1,12 @@
+1. Libraries used:
+    Matplotlib -
+        Advantages: It's a very lightweight and easy library to use. It's very powerful and gives full control. Good documentation and resources online.
+        Disadvantages: It's mostly visualization, relies on pandas for analysis.
+    leather -
+        Advantages: User friendly, .Easy to use. Generates svg files
+        Disadvantages: Unlike plotly, no responsive/dynamic graphs.
+
+2. Graphs plotted:
+    Scatter plot: This was chosen because it provides relationship between temperature and humidity.
+    Boxplot: Gives 5 point distribution metric in a single figure. (minimum, 1st quartile, median, 3rd quartile, maximum and outliers). That's a lot of information in a single figure displayed in sophisticated manner.
+
