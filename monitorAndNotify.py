@@ -70,7 +70,7 @@ class MonitorAndNotify(object):
         db.create_tables()
         try:
             db.insert_notification_confirmation()
-        except:
+        except Error:
             pass  # ignore error here
 
         try:
