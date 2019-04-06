@@ -40,8 +40,8 @@ class GreenhouseMonitorDatabase(object):
 
     def insert_notification_confirmation(self):
         self.__cursor.execute('''
-                    INSERT INTO notification_confirmation (notification_sent) VALUES (0);
-                ''')
+                    INSERT INTO notification_confirmation VALUES (?, 0);
+                ''',(date.today().__str__(),))
         self.__db_connection.commit()
 
     def check_notification_sent(self):
