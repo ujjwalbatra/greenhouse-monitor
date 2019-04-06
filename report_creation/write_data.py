@@ -1,5 +1,4 @@
 import csv
-from datetime import time
 
 
 class WriteData:

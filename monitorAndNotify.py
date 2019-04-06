@@ -7,7 +7,7 @@ from datetime import datetime
 from sqlite3 import Error
 import logging
 
-logging.basicConfig(filename="./logs/greenhouse.log", filemode='a',level=logging.DEBUG)
+logging.basicConfig(filename="./logs/greenhouse.log", filemode='a', level=logging.DEBUG)
 
 
 class MonitorAndNotify(object):
@@ -74,7 +74,7 @@ class MonitorAndNotify(object):
             pass  # ignore error here
 
         try:
-        
+
             while True:
                 MonitorAndNotify.monitor_and_notify(db)
                 time.sleep(60)

@@ -2,11 +2,9 @@ from database import greenhouse_monitor_database
 import matplotlib.pyplot as matplotlib_obj
 import logging
 from datetime import datetime
-import random
 import leather
 
-
-# logging.basicConfig(filename="logs/analytics.log", filemode='a', level=logging.DEBUG)
+logging.basicConfig(filename="logs/analytics.log", filemode='a', level=logging.DEBUG)
 
 
 class Analytics(object):
@@ -61,9 +59,9 @@ class Analytics(object):
 
 
 if __name__ == "__main__":
-    # try:
-    analyse = Analytics()
-    analyse.generate_scatter_plot()
-    analyse.generate_box_plot()
-    # except Exception as e:
-    #     logging.warning(e.__str__() + " " + datetime.now().__str__())
+    try:
+        analyse = Analytics()
+        analyse.generate_scatter_plot()
+        analyse.generate_box_plot()
+    except Exception as e:
+        logging.warning(e.__str__() + " " + datetime.now().__str__())
