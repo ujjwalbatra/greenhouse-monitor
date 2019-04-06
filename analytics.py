@@ -1,11 +1,12 @@
 from database import greenhouse_monitor_database
 import matplotlib.pyplot as matplotlib_obj
-import pandas
-import seaborn
 import logging
 from datetime import datetime
+import random
+import leather
 
-logging.basicConfig(filename="logs/analytics.log", filemode='a', level=logging.DEBUG)
+
+# logging.basicConfig(filename="logs/analytics.log", filemode='a', level=logging.DEBUG)
 
 
 class Analytics(object):
@@ -38,33 +39,31 @@ class Analytics(object):
         self.__formatted_humidity = humidity
 
     def generate_scatter_plot(self):
-        matplotlib_obj.scatter(self.__formatted_temperature, self.__formatted_humidity, 8, "navy", alpha=0.5)
+        boxplot_data = [self.__formatted_temperature, self.__formatted_humidity]
+        matplotlib_obj.boxplot(boxplot_data, notch=True)
 
         # setting labels and title
-        matplotlib_obj.xlabel("Temprature (*c)")
-        matplotlib_obj.ylabel("Humidity (%rH)")
-        matplotlib_obj.title("Temperature vs Humidity")
+        matplotlib_obj.title("Distribution in Temprature and Humidity")
+        matplotlib_obj.savefig('box_plot.png')
 
-        matplotlib_obj.savefig('scatter_plot.png')
+    # used for coloring the graph
+    def colorizer(self, d):
+        return 'rgb(%i, %i, %i)' % (d.x, d.y, 150)
 
     def generate_box_plot(self):
-        sensor_data_dict = {'temperature': self.__formatted_temperature, 'humidity': self.__formatted_humidity}
+        # insert data
+        dot_data = [(self.__formatted_temperature[i], self.__formatted_humidity[i]) for i in
+                    range(self.__formatted_temperature.__len__())]
 
-        dataframe = pandas.DataFrame().from_dict(sensor_data_dict)
-
-        seaborn_plot = seaborn.boxplot(data=dataframe, width=0.5).set_title('Distribution in Temprature and Humidity')
-
-        # setting labels as empty using matplotlib ob
-        matplotlib_obj.xlabel("")
-        matplotlib_obj.ylabel("")
-        image = seaborn_plot.get_figure()
-        image.savefig("boxplot.png")
+        chart = leather.Chart('Humidity vs Temperature (Humidity %rH on y axis & Temperature *c on x axis)')
+        chart.add_dots(dot_data, fill_color=self.colorizer)
+        chart.to_svg('scatter_plot.svg')
 
 
 if __name__ == "__main__":
-    try:
-        analyse = Analytics()
-        analyse.generate_scatter_plot()
-        analyse.generate_box_plot()
-    except Exception as e:
-        logging.warning(e.__str__() + " " + datetime.now().__str__())
+    # try:
+    analyse = Analytics()
+    analyse.generate_scatter_plot()
+    analyse.generate_box_plot()
+    # except Exception as e:
+    #     logging.warning(e.__str__() + " " + datetime.now().__str__())

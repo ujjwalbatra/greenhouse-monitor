@@ -2,9 +2,9 @@
     Matplotlib -
         Advantages: It's a very lightweight and easy library to use. It's very powerful and gives full control. Good documentation and resources online.
         Disadvantages: It's mostly visualization, relies on pandas for analysis.
-    Seaborn - (used pandas to create dataframe)
-        Advantages: It's more high level and based on matplotlib. Provides great functionality out of the box. Good documentation and resources online. Easy to use.
-        Disadvantages: relies on pandas for analysis. Unlike plotly, no responsive/dynamic graphs.
+    leather -
+        Advantages: User friendly, .Easy to use. Generates svg files
+        Disadvantages: Unlike plotly, no responsive/dynamic graphs.
 
 2. Graphs plotted:
     Scatter plot: This was chosen because it provides relationship between temperature and humidity.
