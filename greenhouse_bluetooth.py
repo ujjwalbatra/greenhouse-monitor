@@ -4,60 +4,17 @@ import json
 from database.greenhouse_monitor_database import GreenhouseMonitorDatabase
 import bluetooth
 import subprocess as sp
-import time
-
-
-class BlueToothNotify:
-
-    def check_temp_humidity(self, range_):
-        line = {
-            "Min_temp_diff": 0,
-            "Max_temp_diff": 0,
-            "Min_humidity_diff": 0,
-            "Max_humidity_diff": 0
-        }
-        db = GreenhouseMonitorDatabase()
-
-        if range_["min_temperature"] > db.get_today_min_temp()[0][0]:
-            line["Min_temp_diff"] = range_["min_temperature"] - db.get_today_min_temp()[0][0]
-
-        if range_["max_temperature"] < db.get_today_max_temp()[0][0]:
-            line["Max_temp_diff"] = db.get_today_max_temp()[0][0] - range_["max_temperature"]
-
-        if range_["min_humidity"] > db.get_today_min_humidity()[0][0]:
-            line["Min_humidity_diff"] = range_["min_humidity"] - db.get_today_min_humidity()[0][0]
-
-        if range_["max_humidity"] < db.get_today_max_humidity()[0][0]:
-            line["Max_humidity_diff"] = db.get_today_max_humidity()[0][0] - range_["max_humidity"]
-        self.notify(line)
-
-    def notify(self, line):
-        status = "OK"
-        reasons = []
-        if line["Min_temp_diff"] != 0:
-            status = "Bad"
-            reasons.append('\n%s less than the minimum temperature. ' % line["Min_temp_diff"])
-        if line["Max_temp_diff"] != 0:
-            status = "Bad"
-            reasons.append("\n%s more than the maximum temperature. " % line["Max_temp_diff"])
-        if line["Min_humidity_diff"] != 0:
-            status = "Bad"
-            reasons.append("\n%s less than the minimum humidity. " % line["Min_humidity_diff"])
-        if line["Max_humidity_diff"] != 0:
-            status = "Bad"
-            reasons.append("\n%s more than the maximum humidity. " % line["Max_humidity_diff"])
-
-        reason = ''.join(reasons)
-        if status == "Bad":
-            pb = PushBullet("Warning! Values out of range.", reason)
-            pb.send_notification()
+import logging
+from monitorAndNotify import MonitorAndNotify
+from sense_hat_monitoring import sensor_data
+logging.basicConfig(filename="./logs/bluetooth.log", filemode='a',level=logging.DEBUG)
 
 
 class GreenHouseBluetooth(threading.Thread):
     def run(self):
         p = sp.Popen(["bt-device", "--list"], stdin=sp.PIPE, stdout=sp.PIPE, close_fds=True)
         (stdout, stdin) = (p.stdout, p.stdin)
-
+        db = GreenhouseMonitorDatabase()
         data = stdout.readlines()
         for devices in data:
             devices = devices.decode("utf-8")
@@ -67,8 +24,14 @@ class GreenHouseBluetooth(threading.Thread):
             trusted_devices = device
             for addr, name in nearby_devices:
                 if addr == trusted_devices:
-                    notify = BlueToothNotify()
-                    notify.check_temp_humidity(self.get_range())
+                    temperature_humidity = sensor_data.SensorData()
+                    temperature = temperature_humidity.get_temperature()
+                    humidity = temperature_humidity.get_humidity()
+                    detail='\n Temperature: %.2f *c' %temperature
+                    detail+= '\n Humidity:%.2f *c ' %humidity
+                    pb = PushBullet("Current values", detail)
+                    pb.send_notification()
+                    MonitorAndNotify.monitor_and_notify(db)
 
     def get_range(self):
         with open('config.json') as json_file:
@@ -79,3 +42,4 @@ class GreenHouseBluetooth(threading.Thread):
 if __name__ == '__main__':
     bluetooth_notifications = GreenHouseBluetooth()
     bluetooth_notifications.start()
+
