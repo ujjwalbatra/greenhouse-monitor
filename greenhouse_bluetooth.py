@@ -20,7 +20,7 @@ class GreenHouseBluetooth(threading.Thread):
         for devices in data:
             devices = devices.decode("utf-8")
             device = devices[devices.find('(') + 1:devices.find(')')]
-            print(device)
+
             nearby_devices = bluetooth.discover_devices(lookup_names=True)
             trusted_devices = device
 
