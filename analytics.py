@@ -3,9 +3,9 @@ import matplotlib.pyplot as matplotlib_obj
 import pandas
 import seaborn
 import logging
+from datetime import datetime
 
-
-# logging.basicConfig(filename="logs/analytics.log", filemode='a', level=logging.DEBUG)
+logging.basicConfig(filename="logs/analytics.log", filemode='a', level=logging.DEBUG)
 
 
 class Analytics(object):
@@ -27,12 +27,12 @@ class Analytics(object):
         humidity = []
 
         for row in self.__raw_data:
-            temp_db = int(row[2])
-            humidity_db = int(row[3])
+            temp_db = row[2]
+            humidity_db = row[3]
 
             # rounding off temp/humidity to 2 places after the decimal
-            temperature.append(round(temp_db, 2))
-            humidity.append(round(humidity_db, 2))
+            temperature.append(int(temp_db))
+            humidity.append(int(humidity_db))
 
         self.__formatted_temperature = temperature
         self.__formatted_humidity = humidity
@@ -47,12 +47,14 @@ class Analytics(object):
 
         matplotlib_obj.savefig('scatter_plot.png')
 
-    def generate_boxplot(self):
+    def generate_box_plot(self):
         sensor_data_dict = {'temperature': self.__formatted_temperature, 'humidity': self.__formatted_humidity}
 
         dataframe = pandas.DataFrame().from_dict(sensor_data_dict)
 
         seaborn_plot = seaborn.boxplot(data=dataframe, width=0.5).set_title('Distribution in Temprature and Humidity')
+
+        # setting labels as empty using matplotlib ob
         matplotlib_obj.xlabel("")
         matplotlib_obj.ylabel("")
         image = seaborn_plot.get_figure()
@@ -60,9 +62,9 @@ class Analytics(object):
 
 
 if __name__ == "__main__":
-    # try:
-    analyse = Analytics()
-    analyse.generate_scatter_plot()
-    analyse.generate_boxplot()
-    # except Exception as e:
-    #     logging.warning(e.__str__() + " " + datetime.now().__str__())
+    try:
+        analyse = Analytics()
+        analyse.generate_scatter_plot()
+        analyse.generate_box_plot()
+    except Exception as e:
+        logging.warning(e.__str__() + " " + datetime.now().__str__())
