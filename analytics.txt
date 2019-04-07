@@ -7,6 +7,14 @@
         Disadvantages: Unlike plotly, no responsive/dynamic graphs.
 
 2. Graphs plotted:
-    Scatter plot: This was chosen because it provides relationship between temperature and humidity.
-    Boxplot: Gives 5 point distribution metric in a single figure. (minimum, 1st quartile, median, 3rd quartile, maximum and outliers). That's a lot of information in a single figure displayed in sophisticated manner.
+    Scatter plot:
+                  This was chosen because it provides relationship between temperature and humidity.
+                  It can be seen that as the temperature increases humidity decreases .
+                  At lower temperature the humidity was more than 50%
+                  At the average temperature of 44*c the humidity was 30%
+    Boxplot:
+                  Gives 5 point distribution metric in a single figure. (minimum, 1st quartile, median, 3rd quartile, maximum and outliers). That's a lot of information in a single figure displayed in sophisticated manner.
+                  It gives the distribution of temperature and humidity and helps us understand the range in which the these values usually reside.
+                  The median temperature to be around 44*c and the median humidity to be around 27%
+                  Temperature is ranging from 39*c to 47*c and humidity is ranging from 22% to 37%
 
