@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from notification.pushbullet import PushBullet
 import threading
 import json
