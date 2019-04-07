@@ -3,9 +3,10 @@ import csv
 
 class WriteData:
 
-    def __init__(self, range_, rows):
+    def __init__(self, range_, rows, file):
         self.__range = range_
         self.__rows = rows
+        self.csvFile = file
 
     def generate_report(self):
         start_date = self.__get_first_date(self.__rows)
@@ -62,7 +63,6 @@ class WriteData:
                         line["max_temp_diff"] = diff
                         time_of_occurance["max_temp_time"] = row[4]
 
-
             else:
                 self.__write_csv(date, line, time_of_occurance)
                 start_date = (row[1])
@@ -108,7 +108,7 @@ class WriteData:
         reason = ''.join(reasons)
 
         row = date, status, reason
-        with open('report.csv', 'a') as csvFile:
+        with open(self.csvFile, 'a') as csvFile:
             writer = csv.writer(csvFile)
             writer.writerow(row)
             csvFile.close()

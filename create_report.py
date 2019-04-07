@@ -8,9 +8,9 @@ class CreateReport:
     __range = None
 
     # initializes the report
-    def __initialize_headers(self):
+    def __initialize_headers(self, file):
         row = ["Date", "Status", "Reason"]
-        with open('report.csv', 'a') as csvFile:
+        with open(file, 'a') as csvFile:
             writer = csv.writer(csvFile)
             writer.writerow(row)
             csvFile.close()
@@ -22,8 +22,10 @@ class CreateReport:
             return data['data_range']
 
     def main(self):
+        file = input("Please enter the csv file without the extention(.csv)\n")
+        file += ".csv"
         # make csv file with headers
-        self.__initialize_headers()
+        self.__initialize_headers(file)
 
         # get all sensors data
         db = greenhouse_monitor_database.GreenhouseMonitorDatabase()
@@ -31,7 +33,7 @@ class CreateReport:
         rows = db.get_all_sensor_data()
 
         # write data tro csv
-        write_data_ = write_data.WriteData(self.__range, rows)
+        write_data_ = write_data.WriteData(self.__range, rows, file)
         write_data_.generate_report()
 
 
